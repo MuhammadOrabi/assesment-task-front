@@ -3,18 +3,21 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 
 import Buefy from 'buefy'
 
 require('../node_modules/buefy/dist/buefy.css')
 
 Vue.use(Buefy)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
