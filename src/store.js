@@ -22,5 +22,23 @@ export default new Vuex.Store({
         loginPatient (state, patient) {
             state.patient = patient
         }
-    }
+    },
+    getters: {
+        isPatient: state => {
+            return state.patient.token != null
+        },
+        isDoctor: state => {
+            return state.doctor.token != null
+        },
+        loggedUser: (state, getters) => {
+            if (getters.isDoctor) {
+                return state.doctor
+            } else if (getters.isPatient) {
+                return state.patient
+            } else {
+                return null
+            }
+        },
+
+      }
   })

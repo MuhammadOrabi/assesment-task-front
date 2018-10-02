@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-
+import axios from 'axios'
 import Buefy from 'buefy'
 
 require('../node_modules/buefy/dist/buefy.css')
@@ -21,3 +21,5 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+window.axios = axios

@@ -15,7 +15,7 @@
                     <span>Patient</span>
                 </b-radio-button>
 
-                <b-radio-button v-model="form.type" native-value="doctor" type="is-info">
+                <b-radio-button v-model="form.type" native-value="Yep" type="is-info">
                     <b-icon icon="check"></b-icon>
                     <span>Doctor</span>
                 </b-radio-button>
@@ -30,7 +30,7 @@
 
 <script>
     export default {
-        name: 'Login',
+        name: 'CreateAppointment',
         data() {
             return {
                 form: {
@@ -58,17 +58,12 @@
                         token: res.data.jwt_token,
                         id: res.data.id
                     })
-                    window.location = '/dashboard'
                 }).catch(err => console.log(err));
             },
             doctor() {
-                axios.post(`${process.env.VUE_APP_DOCTORS_API}/login`, this.form)
+                axios.post(`${'http://localhost:3000/api/doctors'}`, this.form)
                 .then(res => {
-                    this.$store.commit('loginDoctor', {
-                        token: res.data.jwt_token,
-                        id: res.data.id
-                    })
-                    window.location = '/dashboard'
+                    console.log(res);
                 }).catch(err => console.log(err));
             }
         }

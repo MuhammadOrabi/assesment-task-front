@@ -19,14 +19,24 @@
                     <span>Patient</span>
                 </b-radio-button>
 
-                <b-radio-button v-model="form.type" native-value="Yep" type="is-info">
+                <b-radio-button v-model="form.type" native-value="doctor" type="is-info">
                     <b-icon icon="check"></b-icon>
                     <span>Doctor</span>
                 </b-radio-button>
             </b-field>
         </b-field>
+
+        <b-field grouped v-if="form.type == 'doctor'">
+            <b-field label="Major">
+                <b-input v-model="form.major"></b-input>
+            </b-field>
+            <b-field label="Appointment processing Time (minutes)">
+                <b-input type="number" v-model="form.appointment_time"></b-input>
+            </b-field>
+        </b-field>
+
         <b-field>
-            <button class="button is-success" :disabled="isDisabled">Sign up</button>
+            <button class="button is-success" :disabled="isDisabled" @click="check">Sign up</button>
         </b-field>
 
     </section>
@@ -56,10 +66,24 @@
                 }
             },
             patient() {
-
+                axios.post(`${process.env.VUE_APP_PATIENTS_API}/register`, this.form)
+                .then(res => {
+                    this.$store.commit('loginPatient', {
+                        token: res.data.jwt_token,
+                        id: res.data.id
+                    })
+                    window.location = '/dashboard'
+                }).catch(err => console.log(err));
             },
             doctor() {
-
+                axios.post(`${process.env.VUE_APP_DOCTORS_API}/register`, this.form)
+                .then(res => {
+                    this.$store.commit('loginDoctor', {
+                        token: res.data.jwt_token,
+                        id: res.data.id
+                    })
+                    window.location = '/dashboard'
+                }).catch(err => console.log(err));
             }
         }
     }
