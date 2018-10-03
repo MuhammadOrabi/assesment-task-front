@@ -1,13 +1,13 @@
 <template>
     <section>
         <section v-if="isPatient">
-            <h1 class="title">Doctors</h1>
-            <Doctors />
+            <h1 class="title"></h1>
+            <Appointments />
             <hr>
         </section>
         <section v-if="isDoctor">
             <h1 class="title">Appointments</h1>
-            <Appointments />
+            <Doctors />
         </section>
     </section>
 </template>
