@@ -66,7 +66,11 @@
                 }
             },
             patient() {
-                axios.post(`${process.env.VUE_APP_PATIENTS_API}/register`, this.form)
+                axios.post(`${process.env.VUE_APP_PATIENTS_API}/register`, this.form, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                 .then(res => {
                     this.$store.commit('loginPatient', {
                         token: res.data.jwt_token,

@@ -91,6 +91,10 @@
                     headers: { 'Authorization': `Bearer ${this.doctor.token}` }
                 })
                 .then(res => {
+                    this.$toast.open({
+                        message: `Saved successfully!`,
+                        type: 'is-success'
+                    })
                     console.log(res);
                 }).catch(err => console.log(err));
             }

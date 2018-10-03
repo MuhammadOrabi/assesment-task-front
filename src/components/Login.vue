@@ -1,5 +1,6 @@
 <template>
     <section>
+        <b-notification type="is-danger" v-if="err">{{ err }}</b-notification>
         <b-field label="Username">
             <b-input type="text" v-model="form.username" required></b-input>
         </b-field>
@@ -35,7 +36,8 @@
             return {
                 form: {
                     type: 'patient'
-                }
+                },
+                err: null
             }
         },
         computed: {
@@ -59,7 +61,7 @@
                         id: res.data.id
                     })
                     window.location = '/dashboard'
-                }).catch(err => console.log(err));
+                }).catch(err => this.err = err.message);
             },
             doctor() {
                 axios.post(`${process.env.VUE_APP_DOCTORS_API}/login`, this.form)
@@ -69,7 +71,7 @@
                         id: res.data.id
                     })
                     window.location = '/dashboard'
-                }).catch(err => console.log(err));
+                }).catch(err => this.err = err.message);
             }
         }
     }

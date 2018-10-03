@@ -118,6 +118,10 @@
                 })
                 .then(res => {
                     this.isModalActive = false;
+                    this.$toast.open({
+                        message: `Saved successfully!`,
+                        type: 'is-sucess'
+                    })
                 }).catch(err => console.log(err))
             }
         }
