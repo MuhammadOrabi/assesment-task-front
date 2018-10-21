@@ -7,3 +7,5 @@ COPY package.json .
 RUN yarn
 
 COPY . .
+
+ENV EIO_WS_ENGINE=ws

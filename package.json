@@ -13,8 +13,11 @@
     "axios": "^0.18.0",
     "buefy": "^0.6.7",
     "bulma": "^0.7.1",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-socket.io": "^2.1.1-b",
     "vuex": "^3.0.1",
     "vuex-localstorage": "^1.0.0"
   },
