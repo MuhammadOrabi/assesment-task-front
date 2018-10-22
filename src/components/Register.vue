@@ -43,17 +43,12 @@
 </template>
 
 <script>
-    import io from 'socket.io-client';
-    // const socket = io('http://events:8888', {
-    //     path: '/socket'
-    // });
-
     export default {
         name: 'Register',
         data() {
             return {
                 form: {
-                    type: 'patient',
+                    type: 'doctor',
                     username: 'username',
                     name: 'user',
                     password: 'password'
@@ -67,12 +62,7 @@
         },
         methods: {
             check() {
-                axios.get('http://patients:5000/api/patients/').then(res => console.log(res)).catch(err => console.log(err));
-                // if (this.form.type === 'patient') {
-                //     this.patient();
-                // } else {
-                //     this.doctor();
-                // }
+                this.$socket.emit(`${this.form.type}.create`, this.form);
             },
             patient() {
                 axios.post(`${process.env.VUE_APP_PATIENTS_API}/register`, this.form, {
