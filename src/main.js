@@ -10,7 +10,7 @@ import VueSocketio from 'vue-socket.io';
 
 require('../node_modules/buefy/dist/buefy.css')
 
-Vue.use(VueSocketio, 'http://localhost:8888');
+Vue.use(VueSocketio, '/');
 
 Vue.use(Buefy)
 

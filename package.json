@@ -5,21 +5,30 @@
   "author": "Muhammad Orabi",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "dev:webpackserver": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "npm-run-all --parallel watch start",
+    "start": "nodemon server.js",
+    "watch": "webpack  --progress --hot -w --config build/webpack.dev.conf.js",
     "build": "node build/build.js"
   },
   "dependencies": {
+    "amqplib": "^0.5.2",
     "axios": "^0.18.0",
     "buefy": "^0.6.7",
     "bulma": "^0.7.1",
+    "express": "~4.16.0",
+    "http": "0.0.0",
+    "nodemon": "^1.18.4",
+    "npm-run-all": "^4.1.3",
+    "rootpath": "^0.1.2",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^2.1.1-b",
     "vuex": "^3.0.1",
-    "vuex-localstorage": "^1.0.0"
+    "vuex-localstorage": "^1.0.0",
+    "yarn": "^1.*"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
