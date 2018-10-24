@@ -1,6 +1,18 @@
 <template>
     <section>
-        <b-notification type="is-danger" v-if="err">{{ err }}</b-notification>
+        <article class="message is-danger" v-if="errors.length > 0">
+            <div class="message-header">
+                <p>Ops! Please check the following errors!</p>
+                <button class="delete" aria-label="delete" @click="errors = []"></button>
+            </div>
+            <div class="message-body">
+                <ul>
+                    <li v-for="(error, index) in errors" :key="index">
+                        {{ typeof error.err === 'string'? error.err : error.err.message }}
+                    </li>
+                </ul>
+            </div>
+        </article>
         <b-field label="Username">
             <b-input type="text" v-model="form.username" required></b-input>
         </b-field>
@@ -37,7 +49,8 @@
                 form: {
                     type: 'patient'
                 },
-                err: null
+                err: null,
+                errors: []
             }
         },
         computed: {
@@ -47,11 +60,21 @@
         },
         methods: {
             check() {
-                if (this.form.type === 'patient') {
-                    this.patient();
-                } else {
-                    this.doctor();
-                }
+                this.$socket.emit(`${this.form.type}.authenticate`, this.form);
+
+                this.$options.sockets[`${this.form.type}.authenticate.error`] = data => {
+                    this.errors = [JSON.parse(data)];
+                };
+
+                this.$options.sockets[`${this.form.type}.authenticated`] = data => {
+                    data = JSON.parse(data);
+                    this.$store.commit('loginDoctor', {
+                        token: data.jwt_token,
+                        id: data.id
+                    });
+                    this.$router.push('Dashboard');
+
+                };
             },
             patient() {
                 axios.post(`${process.env.VUE_APP_PATIENTS_API}/login`, this.form)

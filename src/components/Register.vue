@@ -1,5 +1,18 @@
 <template>
     <section>
+        <article class="message is-danger" v-if="errors.length > 0">
+            <div class="message-header">
+                <p>Ops! Please check the following errors!</p>
+                <button class="delete" aria-label="delete" @click="errors = []"></button>
+            </div>
+            <div class="message-body">
+                <ul>
+                    <li v-for="(error, index) in errors" :key="index">
+                        {{ typeof error.err === 'string'? error.err : error.err.message }}
+                    </li>
+                </ul>
+            </div>
+        </article>
         <b-field label="Name">
             <b-input v-model="form.name" required></b-input>
         </b-field>
@@ -52,7 +65,9 @@
                     username: 'username',
                     name: 'user',
                     password: 'password'
-                }
+                },
+                errors: [],
+                created: false
             }
         },
         computed: {
@@ -63,30 +78,14 @@
         methods: {
             check() {
                 this.$socket.emit(`${this.form.type}.create`, this.form);
-            },
-            patient() {
-                axios.post(`${process.env.VUE_APP_PATIENTS_API}/register`, this.form, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(res => {
-                    this.$store.commit('loginPatient', {
-                        token: res.data.jwt_token,
-                        id: res.data.id
-                    })
-                    window.location = '/dashboard'
-                }).catch(err => console.log(err));
-            },
-            doctor() {
-                axios.post(`${process.env.VUE_APP_DOCTORS_API}/register`, this.form)
-                .then(res => {
-                    this.$store.commit('loginDoctor', {
-                        token: res.data.jwt_token,
-                        id: res.data.id
-                    })
-                    window.location = '/dashboard'
-                }).catch(err => console.log(err));
+
+                this.$options.sockets[`${this.form.type}.create.error`] = (data) => {
+                    this.errors = [JSON.parse(data)];
+                };
+
+                this.$options.sockets[`${this.form.type}.created`] = (data) => {
+                    this.$router.push('Login');
+                };
             }
         }
     }
