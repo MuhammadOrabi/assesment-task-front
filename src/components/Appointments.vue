@@ -75,7 +75,8 @@
                 isModalActive: false,
                 doctor: {},
                 form: {},
-                availHours: []
+                availHours: [],
+                errors: []
             }
         },
         computed: {
@@ -88,10 +89,16 @@
         },
         methods: {
             getData() {
-                axios.get(`${process.env.VUE_APP_DOCTORS_API}`)
-                .then(res => {
-                    this.data = res.data
-                }).catch(err => console.log(err))
+                this.$socket.emit(`doctor.get.all`, this.form);
+
+                this.$options.sockets[`doctor.get.all.error`] = (data) => {
+                    this.errors = [JSON.parse(data)];
+                };
+
+                this.$options.sockets[`doctor.got.all`] = (data) => {
+                    data = JSON.parse(data);
+                    this.data = data
+                };
             },
             selectDoctor(doctor) {
                 this.isModalActive = true
@@ -101,10 +108,19 @@
                 if (!this.doctor.id || !this.form.Day) {
                     return;
                 }
-                axios.get(`${process.env.VUE_APP_DOCTORS_API}/${this.doctor.id}/avail/${this.form.Day}`)
-                .then(res => {
-                    this.availHours = res.data;
-                }).catch(err => console.log(err))
+                this.$socket.emit(`doctor.get.avail.day`, {
+                    id: this.doctor.id,
+                    day: this.form.Day
+                });
+
+                this.$options.sockets[`doctor.get.avail.day.error`] = (data) => {
+                    this.errors = [JSON.parse(data)];
+                };
+
+                this.$options.sockets[`doctor.got.avail.day`] = (data) => {
+                    data = JSON.parse(data);
+                    this.availHours = data;
+                };
             },
             make() {
                 this.form.DoctorId = this.doctor.id;
@@ -126,8 +142,4 @@
             }
         }
     }
-/**
- * Day - From - To
- * Day appointments - select hour
- */
 </script>

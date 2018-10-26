@@ -15,6 +15,8 @@ app.get('*', function (req, res) {
 io.on('connection', socket => {
     frontService.doctorCreate(socket);
     frontService.doctorAuthenticate(socket);
+    frontService.doctorGetAll(socket);
+    frontService.doctorGetAvailByDay(socket);
 });
 
 const port = process.env.PORT || 80;
