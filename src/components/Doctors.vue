@@ -86,22 +86,26 @@
             save() {
                 let filtered = this.work.filter((val, index) => {
                     return this.checkboxGroup.includes(index)
-                })
-                axios.put(`${process.env.VUE_APP_DOCTORS_API}`, {work: filtered}, {
-                    headers: { 'Authorization': `Bearer ${this.doctor.token}` }
-                })
-                .then(res => {
+                });
+
+                this.$socket.emit('doctor.update', {
+                    token: this.doctor.token,
+                    doctor: {
+                        work: filtered
+                    }
+                });
+
+                this.$options.sockets['doctor.update.error'] = (data) => {
+                    this.errors = [JSON.parse(data)];
+                };
+
+                this.$options.sockets['doctor.updated'] = (data) => {
                     this.$toast.open({
                         message: `Saved successfully!`,
                         type: 'is-success'
-                    })
-                    console.log(res);
-                }).catch(err => console.log(err));
+                    });
+                };
             }
         }
     }
-/**
- * Day - From - To
- * Day appointments - select hour
- */
 </script>
